@@ -1,0 +1,81 @@
+<!DOCTYPE html>  
+<html>  
+<head>  
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
+<title>运输轨迹图</title>  
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.2"></script>  
+</head>  
+<body>  
+<div  style="width:1000px;height:800px;border:1px solid gray" id="container"></div>
+  
+<script type="text/javascript">  
+    window.onload = function(){
+    	var map = new BMap.Map("container");  
+        map.centerAndZoom(new BMap.Point(108.847098,34.553311), 19);  
+
+//        map.clearOverlays();                        //清除地图上所有的覆盖物  
+        var driving = new BMap.WalkingRoute(map);    //创建实例  
+    	// 坐标点数据
+    	var a = [
+				{lng:114.43843,lat:30.520038,"name":"0"},
+            {lng:114.438463,lat:30.517048},
+            {lng:114.438419,lat:30.51266},
+            {lng:114.442481,lat:30.519354},
+            {lng:114.441106,lat:30.520765},
+            {lng:114.421313,lat:30.521742}
+,
+            {lng:114.421583,lat:30.522408},
+            {lng:114.411855,lat:30.519819},
+            {lng:114.414522,lat:30.521698},
+            {lng:114.423524,lat:30.520158},
+            {lng:114.425741,lat:30.516822},
+            {lng:114.426953,lat:30.516417},
+            {lng:114.411042,lat:30.517985},
+            {lng:114.412597,lat:30.520161},
+            {lng:114.41301,lat:30.520053},
+            {lng:114.410998,lat:30.517339},
+            {lng:114.413336,lat:30.520007}];
+      var pointArr = [a[0],a[11],a[10],a[12],a[15],a[7],a[13],a[14],a[16],a[8],a[5],a[6],a[9],a[2],a[1],a[3],a[4],a[0]];
+		// 生成坐标点
+		var trackPoint = [];
+		for (var i = 0, j = pointArr.length; i < j; i++) {
+			trackPoint.push(new BMap.Point(pointArr[i].lng, pointArr[i].lat));
+		}
+
+
+
+    	for (var i = 0; i < trackPoint.length; i++) {
+        	if(i != trackPoint.length -1 ){
+        		driving.search(trackPoint[i], trackPoint[i+1]);
+           	}
+    	}
+        driving.setSearchCompleteCallback(function(){  
+            var pts = driving.getResults().getPlan(0).getRoute(0).getPath();    //通过实例，获得一系列点的数组  
+      
+            var polyline = new BMap.Polyline(pts);       
+            map.addOverlay(polyline);  
+
+        	// 画图标、想要展示的起点终点途经点
+        	for (var i = 0; i < trackPoint.length; i++) {
+        		var lab;
+            	if(i == 0){
+            		lab = new BMap.Label("起点",{position:trackPoint[i]});
+                }else if(i == trackPoint.length - 1){
+                	lab = new BMap.Label("终点",{position:trackPoint[i]});
+                }else{
+                	/* lab = new BMap.Label("途径点",{position:trackPoint[i]}) */
+                }
+        	    var marker = new BMap.Marker(trackPoint[i])
+        	    map.addOverlay(marker);
+        	    map.addOverlay(lab);
+        	}
+        	map.setViewport(trackPoint);  
+        });  
+    }
+</script>  
+
+</body>  
+</html>  
+</body>
+</html>
+
