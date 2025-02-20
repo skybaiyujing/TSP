@@ -72,6 +72,12 @@ python src/visualize.py
 
 ## 结果示例
 
+#### 1. 步行路线
+<img src="pic/步行图.png" alt="步行最优路径" width="600">
+
+#### 2. 行车路线
+<img src="pic/行车图.png" alt="行车最优路径" width="600">
+
 最终计算出的最优游览顺序如下：
 
 ```
